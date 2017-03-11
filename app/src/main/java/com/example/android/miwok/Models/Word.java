@@ -56,9 +56,9 @@ public class Word {
                 '}';
     }
 
-    /**
+/*    *//**
      * Clean up the media player by releasing its resources.
-     */
+     *//*
     public static void releaseMediaPlayer() {
         // If the media player is not null, then it may be currently playing a sound.
         if (mMediaPlayer != null) {
@@ -73,13 +73,13 @@ public class Word {
         }
     }
 
-    /**
+    *//**
      * This listener gets triggered when the {@link MediaPlayer} has completed playing the audio file.
-     */
+     *//*
     public static MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
         @Override
         public void onCompletion(MediaPlayer mp) {
             releaseMediaPlayer();
         }
-    };
+    };*/
 }

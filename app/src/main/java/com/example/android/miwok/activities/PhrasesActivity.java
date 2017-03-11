@@ -17,6 +17,12 @@ import java.util.ArrayList;
 public class PhrasesActivity extends AppCompatActivity {
 
     MediaPlayer mMediaPlayer;
+    MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mp) {
+            releaseMediaPlayer();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,31 +41,40 @@ public class PhrasesActivity extends AppCompatActivity {
         words.add(new Word("Let’s go.", "yoowutis", R.raw.phrase_lets_go));
         words.add(new Word("Come here.", "әnni'nem", R.raw.phrase_come_here));
 
-        // Creo un Adapter, le paso el contexo, que es esta activity, el recurso, por defecto le pongo
-        // uno que trae Android  y la lista de objetos que  será el origen de datos del "ArrayAdapter".
         WordAdapter adapter = new WordAdapter(this, words, R.color.category_phrases);
 
-        // Busco la listView para pasarle el Adapter la funte de datos.
         ListView listView = (ListView) findViewById(R.id.list);
 
-        // Le paso la fuente de datos al listView para que los muestre.
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Also release the MediaPlayer resources before the MediaPlayer is initialized to play a different song.
-                Word.releaseMediaPlayer();
-                // Get the {@link Word} object at the given position the user clicked on.
+
                 Word word = words.get(position);
+
+                releaseMediaPlayer();
 
                 Log.v("PhraseActivity", "Current phrase: " + word);
 
-                // Create and setup the {@link MediaPlayer} for teh audio resource associated with the current word.
                 mMediaPlayer = MediaPlayer.create(PhrasesActivity.this, word.getmAudioResourceId());
                 mMediaPlayer.start();
-                mMediaPlayer.setOnCompletionListener(Word.mCompletionListener);
+                mMediaPlayer.setOnCompletionListener(mCompletionListener);
             }
         });
+    }
+
+    private void releaseMediaPlayer() {
+        // If the media player is not null, then it may be currently playing a sound.
+        if (mMediaPlayer != null) {
+            // Regardless of the current state of the media player, release its resources
+            // because we no longer need it.
+            mMediaPlayer.release();
+
+            // Set the media player back to null. For our code, we've decided that
+            // setting the media player to null is an easy way to tell that the media player
+            // is not configured to play an audio file at the moment.
+            mMediaPlayer = null;
+        }
     }
 }

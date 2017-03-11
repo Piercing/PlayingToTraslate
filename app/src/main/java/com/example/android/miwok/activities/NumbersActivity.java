@@ -21,23 +21,24 @@ public class NumbersActivity extends AppCompatActivity {
      */
     private MediaPlayer mMediaPlayer;
 
-//    /**
-//     * This listener gets triggered when the {@link MediaPlayer} has completed playing the audio file.
-//     */
-//    private MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
-//
-//        @Override
-//        public void onCompletion(MediaPlayer mp) {
-//            // Now that the sound file has finished playing, release the media player resources.
-//            Word.releaseMediaPlayer();
-//        }
-//    };
+    /**
+     * This listener gets triggered when the {@link MediaPlayer} has completed playing the audio file.
+     */
+    private MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
+
+        @Override
+        public void onCompletion(MediaPlayer mp) {
+            // Now that the sound file has finished playing, release the media player resources.
+            releaseMediaPlayer();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.word_list);
 
+        // Create a list of words
         final ArrayList<Word> words = new ArrayList<Word>();// Lo hacemos final para que el método 'onItemClick' pueda acceder a ella.
         words.add(new Word("one", "lutti", R.drawable.number_one, R.raw.justin_timberlake));
         words.add(new Word("two", "otiiko", R.drawable.number_two, R.raw.number_two));
@@ -50,7 +51,7 @@ public class NumbersActivity extends AppCompatActivity {
         words.add(new Word("nine", "wo'e", R.drawable.number_nine, R.raw.number_nine));
         words.add(new Word("ten", "na'aacha", R.drawable.number_ten, R.raw.number_ten));
 
-        
+
         /**
          * Create an {@link android.widget.ArrayAdapter}, whose data source is a list of Strings. The
          * adapter knows how to create layouts for each item in the list, using the
@@ -76,6 +77,7 @@ public class NumbersActivity extends AppCompatActivity {
          */
         listView.setAdapter(adapter);
 
+        // Set a click listener to play the audio when the list item is clicked on
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -84,19 +86,31 @@ public class NumbersActivity extends AppCompatActivity {
                 Word word = words.get(position);
 
                 // Release the media player if it currently exists because the user clicked on.
-                Word.releaseMediaPlayer();
+                releaseMediaPlayer();
 
                 Log.v("NumbersActivity", "Current word: " + word); // El + llamará al método toString que hemos generado en la clase word.
 
                 /** Create and setup the {@link MediaPlayer} for teh audio resource associated with the current word. */
                 mMediaPlayer = MediaPlayer.create(NumbersActivity.this, word.getmAudioResourceId());
+
+                // Start the audio file.
                 mMediaPlayer.start();
 
                 // Setup a listener on the media player, so that we can stop and release the media player once the sound has finished
                 // playing.
-                mMediaPlayer.setOnCompletionListener(Word.mCompletionListener);
+                mMediaPlayer.setOnCompletionListener(mCompletionListener);
             }
         });
+    }
+
+    /**
+     * Clean up the media player by releasing its resources.
+     */
+    private void releaseMediaPlayer() {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
     }
 }
 

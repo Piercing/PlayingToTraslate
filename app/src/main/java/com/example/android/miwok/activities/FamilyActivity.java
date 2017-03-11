@@ -18,6 +18,14 @@ public class FamilyActivity extends AppCompatActivity {
 
     MediaPlayer mMediaPlayer;
 
+    MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
+
+        @Override
+        public void onCompletion(MediaPlayer mp) {
+            releaseMediaPlayer();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,30 +43,34 @@ public class FamilyActivity extends AppCompatActivity {
         words.add(new Word("grandmother ", "ama", R.drawable.family_grandmother, R.raw.family_grandmother));
         words.add(new Word("grandfather", "paapa", R.drawable.family_grandfather, R.raw.family_grandfather));
 
-        // Creo un Adapter, le paso el contexo, que es esta activity, el recurso, por defecto le pongo
-        // uno que trae Android  y la lista de objetos que  será el origen de datos del "ArrayAdapter".
+
         WordAdapter adapter = new WordAdapter(this, words, R.color.category_family);
 
-        // Busco la listView para pasarle el Adapter la funte de datos.
         ListView listView = (ListView) findViewById(R.id.list);
 
-        // Le paso la fuente de datos al listView para que los muestre.
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Word.releaseMediaPlayer();
-                // Get the {@link Word} object at the given position the user clicked on.
+
                 Word word = words.get(position);
+
+                releaseMediaPlayer();
 
                 Log.v("FamilyActivity", "Current family: " + word);
 
-                // Create and setup the {@link MediaPlayer} for teh audio resource associated with the current word.
                 mMediaPlayer = MediaPlayer.create(FamilyActivity.this, word.getmAudioResourceId());
                 mMediaPlayer.start();
-                mMediaPlayer.setOnCompletionListener(Word.mCompletionListener);
+                mMediaPlayer.setOnCompletionListener(mCompletionListener);
             }
         });
+    }
+
+    private void releaseMediaPlayer() {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
     }
 }
