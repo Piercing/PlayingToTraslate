@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.activity_main);
 
-        // Encontrar la vista que muestra la categoría de los números.
+        // Find views.
         TextView numbers = (TextView) findViewById(R.id.numbers);
         TextView family = (TextView)findViewById(R.id.family);
         TextView colors = (TextView)findViewById(R.id.colors);
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Al hacer click en la vista numbers, activo un evento ya que está a la escucha.
         // Para ello creo un nuevo objeto onclicklistener pasándoselo como parámetro.
-        // Al ser una interfaz implementa el médoto onclick, y dentro de éste ponemos
+        // Al ser una interfaz implementa el métoto onclick, y dentro de éste ponemos
         // el código que se quiera llevar a cabo, en este caso, abrir otra pantalla
         // mediante un intent, que es la actividad de los numbers, al ser tocada en la app.
         numbers.setOnClickListener(new View.OnClickListener() {

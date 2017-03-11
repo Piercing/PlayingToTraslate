@@ -28,9 +28,7 @@ public class WordAdapter extends ArrayAdapter<Word> {
      * @param colorResourceId
      */
     public WordAdapter(Activity context, ArrayList<Word> words, int colorResourceId) {
-        super(context, 0, words); // cero, es el uso de la disposición de los elementos de la lista. Ponemos cero como un recurso para el
-        // diseño, porque no tenemos que depender de la superclase para inflar o crear una visualización del elemento de la lista. Para
-        // ello en método getView manejará de forma manual inflar el diseño mediante el recurso de diseño que le pasamos, 'list_item'.
+        super(context, 0, words);
         mColorResourceId = colorResourceId;
     }
 
@@ -68,7 +66,7 @@ public class WordAdapter extends ArrayAdapter<Word> {
         defaultTextView.setText(currentWord.getmDefaultTranslation());
 
         // Find de ImageView in the list_item layout with the ID image_resource_image_view.
-        ImageView imageRsource = (ImageView) listItemView.findViewById(R.id.image_resource_image_view);
+        ImageView imageRsource = (ImageView) listItemView.findViewById(R.id.image);
 
         if (currentWord.hasImage()) {
             // Get the image resource from the current Word object and set this image on the image ImageView.
