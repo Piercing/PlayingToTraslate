@@ -17,6 +17,8 @@ package com.example.android.miwok.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -25,6 +27,27 @@ import com.example.android.miwok.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    TabLayout tabLayout;
+    ViewPager viewPager;
+    public static String POSITION = "POSITION";
+
+
+    // podemos guardar y restaurar la última posición conocida pestaña mediante la aplicación
+    // de métodos de onSaveInstanceState() y onRestoreInstanceState()de persistir estos datos.
+    // Cuando se vuelve a crear la vista, podemos utilizar estos datos y establecer la pestaña
+    // actual al último valor pestaña seleccionada.
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(POSITION, tabLayout.getSelectedTabPosition());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        viewPager.setCurrentItem(savedInstanceState.getInt(POSITION));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,11 +55,19 @@ public class MainActivity extends AppCompatActivity {
         // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.activity_main);
 
+        /// Get the ViewPager and set it's PagerAdapter so that it can display items
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(new SampleFragmentPagerAdapter(getSupportFragmentManager(), MainActivity.this));
+
+        // Give the TabLayout the ViewPager
+        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
         // Find views.
         TextView numbers = (TextView) findViewById(R.id.numbers);
-        TextView family = (TextView)findViewById(R.id.family);
-        TextView colors = (TextView)findViewById(R.id.colors);
-        TextView phrases = (TextView)findViewById(R.id.phrases);
+        TextView family = (TextView) findViewById(R.id.family);
+        TextView colors = (TextView) findViewById(R.id.colors);
+        TextView phrases = (TextView) findViewById(R.id.phrases);
 
 
         // Al hacer click en la vista numbers, activo un evento ya que está a la escucha.
