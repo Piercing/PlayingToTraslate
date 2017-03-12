@@ -1,85 +1,90 @@
 package com.example.android.miwok.Models;
 
-
-import android.media.MediaPlayer;
-
+/**
+ * {@link Word} represents a vocabulary word that the user wants to learn.
+ * It contains resource IDs for the default translation, Miwok translation, audio file, and
+ * optional image file for that word.
+ */
 public class Word {
 
-    private String mDefaultTranslation;
-    private String mMiwokTranslation;
-    private int mAudioResourceId;
-    private int mImageResourceId = NO_IMAGE_PROVIDED;
-    private static MediaPlayer mMediaPlayer;
+    /** String resource ID for the default translation of the word */
+    private int mDefaultTranslationId;
 
+    /** String resource ID for the Miwok translation of the word */
+    private int mMiwokTranslationId;
+
+    /** Audio resource ID for the word */
+    private int mAudioResourceId;
+
+    /** Image resource ID for the word */
+    private int mImageResourceId = NO_IMAGE_PROVIDED;
+
+    /** Constant value that represents no image was provided for this word */
     private static final int NO_IMAGE_PROVIDED = -1;
 
-    public Word(String defaultTranslation, String miwoktranslation, int audioResourceId) {
-        mDefaultTranslation = defaultTranslation;
-        mMiwokTranslation = miwoktranslation;
+    /**
+     * Create a new Word object.
+     *
+     * @param defaultTranslationId is the string resource ID for the word in a language that the
+     *                             user is already familiar with (such as English)
+     * @param miwokTranslationId is the string resource Id for the word in the Miwok language
+     * @param audioResourceId is the resource ID for the audio file associated with this word
+     */
+    public Word(int defaultTranslationId, int miwokTranslationId, int audioResourceId) {
+        mDefaultTranslationId = defaultTranslationId;
+        mMiwokTranslationId = miwokTranslationId;
         mAudioResourceId = audioResourceId;
     }
 
-    public Word(String defaultTranslation, String miwoktranslation, int imageResourceId, int audioResourceId) {
-        mDefaultTranslation = defaultTranslation;
-        mMiwokTranslation = miwoktranslation;
+    /**
+     * Create a new Word object.
+     *
+     * @param defaultTranslationId is the string resource ID for the word in a language that the
+     *                             user is already familiar with (such as English)
+     * @param miwokTranslationId is the string resource Id for the word in the Miwok language
+     * @param imageResourceId is the drawable resource ID for the image associated with the word
+     * @param audioResourceId is the resource ID for the audio file associated with this word
+     */
+    public Word(int defaultTranslationId, int miwokTranslationId, int imageResourceId,
+                int audioResourceId) {
+        mDefaultTranslationId = defaultTranslationId;
+        mMiwokTranslationId = miwokTranslationId;
         mImageResourceId = imageResourceId;
         mAudioResourceId = audioResourceId;
     }
 
-    public String getmDefaultTranslation() {
-        return mDefaultTranslation;
+    /**
+     * Get the string resource ID for the default translation of the word.
+     */
+    public int getDefaultTranslationId() {
+        return mDefaultTranslationId;
     }
 
-    public String getmMiwokTranslation() {
-        return mMiwokTranslation;
+    /**
+     * Get the string resource ID for the Miwok translation of the word.
+     */
+    public int getMiwokTranslationId() {
+        return mMiwokTranslationId;
     }
 
-    public int getmImageResourceId() {
+    /**
+     * Return the image resource ID of the word.
+     */
+    public int getImageResourceId() {
         return mImageResourceId;
     }
 
-    public int getmAudioResourceId() {
-        return mAudioResourceId;
-    }
-
+    /**
+     * Returns whether or not there is an image for this word.
+     */
     public boolean hasImage() {
         return mImageResourceId != NO_IMAGE_PROVIDED;
     }
 
-    @Override
-    public String toString() {
-        return "Word{" +
-                "mDefaultTranslation='" + mDefaultTranslation + '\'' +
-                ", mMiwokTranslation='" + mMiwokTranslation + '\'' +
-                ", mAudioResourceId=" + mAudioResourceId +
-                ", mImageResourceId=" + mImageResourceId +
-                '}';
+    /**
+     * Return the audio resource ID of the word.
+     */
+    public int getAudioResourceId() {
+        return mAudioResourceId;
     }
-
-/*    *//**
-     * Clean up the media player by releasing its resources.
-     *//*
-    public static void releaseMediaPlayer() {
-        // If the media player is not null, then it may be currently playing a sound.
-        if (mMediaPlayer != null) {
-            // Regardless of the current state of the media player, release its resources
-            // because we no longer need it.
-            mMediaPlayer.release();
-
-            // Set the media player back to null. For our code, we've decided that
-            // setting the media player to null is an easy way to tell that the media player
-            // is not configured to play an audio file at the moment.
-            mMediaPlayer = null;
-        }
-    }
-
-    *//**
-     * This listener gets triggered when the {@link MediaPlayer} has completed playing the audio file.
-     *//*
-    public static MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
-        @Override
-        public void onCompletion(MediaPlayer mp) {
-            releaseMediaPlayer();
-        }
-    };*/
 }
